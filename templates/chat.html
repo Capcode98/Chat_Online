@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Chat.secret</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.1/socket.io.js" integrity="sha512-Z6C1p1NIexPj5MsVUunW4pg7uMX6/TT3CUVldmjXx2kpip1eZcrAnxIusDxyFIikyM9A61zOVNgvLr/TGudOQg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    </head>
+
+    <body>
+        <h1>Chat.secret</h1>
+        <div id="lista_mensagens">
+            <p>Você entrou na sala agora! Fique a vontade!</p>
+        </div>
+
+        <input type="text" id="username" placeholder="Digite seu nome de usuário">
+        <input type="text" id="message" placeholder="Digite sua mensagem">
+
+        <button id="send">Enviar mensagem</button>
+
+        <script type="text/javascript">
+
+            $(document).ready(function() {
+
+                var socket = io('http://192.168.1.6:5000');
+
+                socket.on('connect', function() {
+
+                    socket.emit('connection');
+                });
+
+                socket.on('message', function(data){
+
+                    $('#lista_mensagens').append($('<p>').text(data));
+                    
+                });
+
+                $('#send').on('click', function() {
+
+                    var username = $('#username').val();
+                    var message = $('#message').val();
+
+                    console.log( $('#username' + 'clicou no botão').val() );
+                    
+                    socket.send(username + ': ' + message);
+                    
+                    message = $('#message').val('');
+                    
+                });
+
+            });
+
+        </script>
+
+    </body>
+
+</html>
